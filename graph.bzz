@@ -1,0 +1,99 @@
+# AUTHOR : Nathalie Majcherczyk <nmajcherczyk@wpi.edu>
+#
+# This script implements a graph class in Buzz.
+
+# Include files
+include "list.bzz"
+
+#
+# A graph is class-like object.
+#
+graph = {}
+
+#
+# Creates an empty graph.
+#
+graph.create = function() {
+  return {
+    .n = 0,         # Number of vertices
+    .e = 0,         # Number of edges
+    .directed = 0,   # Is the graph directed?
+    .edges = {},    # Table of edges
+    .vertices = {}  # Table of vertices
+  }
+}
+
+graph.set_directed = function (gr, d) {
+  if(d == 1)
+    gr.directed = 1  
+  else if (d == 0)
+    gr.directed = 0
+}
+
+#
+# Adds vertex v to the graph
+#
+graph.add_vertex = function (gr, v, data) {
+  gr.vertices[v] = data
+  gr.n = gr.n + 1
+}
+
+graph.set_vdata = function (gr, v, data) {
+  if(gr.vertices[v] != nil)
+    gr.vertices[v] = data
+}
+
+graph.has_vertex = function (gr, v) {
+  if (gr.vertices[v] != nil)
+    return 1
+  return 0
+}
+
+graph.add_edge = function(gr, u, v) {
+  # Adds vertices to graph if new
+  if (gr.vertices[u] == nil) {
+    graph.add_vertex(gr, u, 0)
+  }
+  if (gr.vertices[v] == nil) {
+    graph.add_vertex(gr, v, 0)
+  }
+  # Creates list if no previous edges
+  if (gr.edges[u] == nil) {
+    gr.edges[u] = list.new()
+  }
+  list.append(gr.edges[u], v)
+  gr.e = gr.e + 1
+  if (gr.directed == 0) {
+    if (gr.edges[v] == nil)
+      gr.edges[v] = list.new()
+    list.append(gr.edges[v], u)
+  }
+}
+
+graph.has_edge = function (gr, u, v) {
+  if (list.get_pos(gr.edges[u], v) != nil)
+    return 1
+  return 0
+}
+
+graph.remove_edge = function(gr, u, v) {
+  if (gr.edges[u] != nil) {
+    var status = list.remove(gr.edges[u], v)
+    gr.e = gr.e - 1
+  }
+  if (gr.directed == 0) {
+    if (gr.edges[v] != nil) {
+      var status = list.remove(gr.edges[v], u)
+    }
+  }
+}
+
+graph.print = function(gr) {
+  foreach(gr.edges, function(key, value){
+    var cur = value.head.next
+    while (cur.next != nil) {
+      print("edge ", key, " -> ", cur.data)
+      cur = cur.next
+    }
+  })
+}

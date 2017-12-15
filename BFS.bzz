@@ -1,0 +1,42 @@
+# AUTHOR : Nathalie Majcherczyk <nmajcherczyk@wpi.edu>
+#          Based on pseudocode from Algorithms in a Nutshell
+#
+# This script implements the breadth first search algorithm in Buzz.
+
+bfs = {}
+bfs.dist = {}
+bfs.pred = {}
+bfs.color = {}
+
+bfs.search = function(gr, target) {
+	foreach(gr.vertices, function(key, value) {
+    bfs.pred[key] = -1
+    bfs.dist[key] = 10000
+    bfs.color[key] = "W"
+  })
+  bfs.color[target] = "G"
+  bfs.dist[target] = 0
+
+  var queue = list.new()
+  list.append(queue, target)
+
+  var tmp = queue.head.next
+  while(tmp.next != nil) {
+    var u = tmp.data
+    var cur = gr.edges[u].head.next
+    while(cur.next != nil){
+      var v = cur.data
+      if (bfs.color[v] == "W") {
+        bfs.dist[v] = bfs.dist[u] + 1
+        bfs.pred[v] = u
+        bfs.color[v] = "G"
+        list.append(queue, v)
+      }
+      cur = cur.next
+    }
+    list.remove(queue, u)
+    bfs.color[u] = "B"
+    tmp = tmp.next
+  }
+
+}

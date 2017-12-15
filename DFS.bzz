@@ -1,0 +1,44 @@
+# AUTHOR : Nathalie Majcherczyk <nmajcherczyk@wpi.edu>
+#          Based on pseudocode from Algorithms in a Nutshell
+#
+# This script implements the depth first search algorithm in Buzz.
+
+dfs = {}
+dfs.d = {}
+dfs.f = {}
+dfs.pred = {}
+dfs.color = {}
+
+dfs.search = function(gr, target) {
+  foreach(gr.vertices, function(key, value) {
+    dfs.d[key] = -1
+    dfs.f[key] = -1
+    dfs.pred[key] = -1
+    # Colors vertices in white
+    dfs.color[key] = "W" 
+  })
+  count = 0
+  dfs.visit(target)
+  foreach(gr.vertices, function(key, value){
+    if(dfs.color[key] == "W"){
+      dfs.visit(key)
+    }
+  })
+}
+
+dfs.visit = function(u) {
+  dfs.color[u] = "G"
+  count = count + 1
+  dfs.d[u] = count
+  var cur = gr.edges[u].head.next
+  while(cur.next != nil){
+    if(dfs.color[cur.data] == "W"){
+      dfs.pred[cur.data] = u
+      dfs.visit(cur.data)
+    }
+    cur = cur.next
+  }
+  dfs.color[u] = "B"
+  count = count + 1
+  dfs.f[u] = count
+}

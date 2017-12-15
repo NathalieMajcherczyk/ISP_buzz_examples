@@ -1,0 +1,21 @@
+# AUTHOR : Nathalie Majcherczyk <nmajcherczyk@wpi.edu>
+#
+# This script implements a graph node class in Buzz.
+
+node = {}
+
+node.empty = function() {
+  return {
+    .prev = {},
+    .next = {},
+    .data = nil
+  }
+}
+
+node.new = function(p, n, d) {
+  return {
+    .prev = p,
+    .next = n,
+    .data = d
+  }
+}

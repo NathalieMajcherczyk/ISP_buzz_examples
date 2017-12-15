@@ -1,0 +1,65 @@
+# AUTHOR : Nathalie Majcherczyk <nmajcherczyk@wpi.edu>
+
+# Include files
+include "graph.bzz"
+include "DFS.bzz"
+include "BFS.bzz"
+include "qsort.bzz"
+
+# Test list class
+print("LIST TEST")
+lt = list.new()
+list.append(lt, 1)
+list.prepend(lt, 2)
+list.insert(lt, 3, 2)
+list.print(lt)
+list.remove(lt, 3)
+print(" ")
+list.print(lt)
+lt = nil
+print(" ")
+
+# Test graph class
+print("GRAPH TEST")
+gr = graph.create()
+graph.add_edge(gr, 1, 2)
+graph.add_edge(gr, 1, "s")
+graph.add_edge(gr, 2, 3)
+graph.add_edge(gr, 2, 6)
+graph.add_edge(gr, 3, 4)
+graph.add_edge(gr, 4, 5)
+graph.add_edge(gr, 4, "s")
+graph.add_edge(gr, 7, 8)
+graph.print(gr)
+print(gr.n)
+print(gr.e)
+graph.remove_edge(gr, 2, 6)
+graph.print(gr)
+graph.add_edge(gr, 2, 6)
+print(" ")
+
+# Test depth first search
+print("DFS TEST")
+dfs.search(gr,"s")
+foreach(dfs.pred, function(key, value) {
+  print(key, " ", value)
+})
+print(" ")
+
+# Test breadth first search
+print("BFS TEST")
+bfs.search(gr,"s")
+foreach(bfs.pred, function(key, value) {
+  print(key, " ", value)
+})
+print(" ")
+
+# Test quicksort
+print("QUICKSORT TEST")
+var A = {}
+A = {.0 = 6, .1 = 5, .2 = 3, .3 = 1, .4 = 4, .5 = 2, .6 = 7}
+print("Test when rng available")
+#qsort.sort(A, 0, 6)
+#foreach(A, function(key, value){
+#	print(value)
+#})

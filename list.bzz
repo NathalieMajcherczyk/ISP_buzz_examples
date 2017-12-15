@@ -1,0 +1,184 @@
+# AUTHOR : Nathalie Majcherczyk <nmajcherczyk@wpi.edu>
+#
+# This script implements a list class in Buzz.
+
+# Include files
+include "node.bzz"
+
+#
+# A list is a class-like object.
+#
+list = {}
+list.head = {}
+list.tail = {}
+
+#
+# Creates a new double-linked list
+#
+list.new = function () {
+  # Create new nodes for head and tail of list
+  var h = node.empty()
+  var t = node.empty()
+  h.next = t
+  h.prev = nil
+  t.prev = h
+  t.next = nil
+  # Return list object
+  return {
+    .count = 0,
+    .head = h,
+    .tail = t
+  }
+}
+
+#
+# Returns the first node with matching data
+# Returns nil if not found
+#
+list.get_node = function (lt, data) {
+  if (lt != nil) {
+    var cur = lt.head
+    while (cur.next != nil) {
+      if(cur.data == data) {
+        return cur
+      }
+      cur = cur.next
+    }
+    return nil
+  } 
+  return nil
+}
+
+#
+# Returns the node at <pos> nodes from the head
+# Position starts at 1, returns nil if pos < 1 
+# Returns last element if overflow
+#
+list.get_node_by_pos = function (lt, pos) {
+  if (lt != nil) {
+    if (pos >= 0) {
+      var i = 0
+      var cur = lt.head
+      while (i < pos and pos <= lt.count) {
+        cur = cur.next
+        i = i + 1
+      }
+      return cur
+    }
+    return nil
+  }
+  return nil
+}
+
+#
+# Returns the position of first node with matching data
+# Returns nil if not found
+#
+list.get_pos = function (lt, data) {
+  if (lt != nil) {
+    var cur = lt.head
+    var pos = 0
+    while (cur.next != nil) {
+      if(cur.data == data) {
+        return pos
+      }
+      pos = pos + 1
+      cur = cur.next
+    }
+    return nil
+  }
+  return nil 
+}
+
+#
+# Inserts a node in position pos from the head
+# Position starts at 1
+#
+list.insert = function (lt, data, pos) {
+  if (lt == nil)
+    lt = list.create()
+  var prev = list.get_node_by_pos(lt, pos - 1)
+  if (prev != nil) {
+    var next = prev.next
+    # Creates new node between prev and next
+    var cur = node.new(prev, next, data)
+    # Updates link of preceding node
+    prev.next = cur
+    # Updates link of following node
+    next.prev = cur
+    lt.count = lt.count + 1
+  }
+}
+
+#
+# Inserts a node at the end of the list
+# (Could be removed, uses knowledge of tail)
+#
+list.append = function (lt, data) {
+  if (lt == nil)
+    lt = list.create()
+  # Create new node linked to the tail 
+  # and its previous node
+  var nd = node.new(lt.tail.prev, lt.tail, data)
+  # Get reference to the preceding node
+  var tmp = lt.tail.prev
+  # Update next of preceding node
+  tmp.next = nd 
+  # Update prev of following node
+  lt.tail.prev = nd
+  # Update node count in list
+  lt.count = lt.count + 1
+}
+
+#
+# Inserts a node at the beginning of the list
+# (Could be removed, uses knowledge of head)
+#
+list.prepend = function (lt, data) {
+  if (lt == nil)
+    lt = list.create()
+  # Create new node linked to the tail 
+  # and its previous node
+  var nd = node.new(lt.head, lt.head.next, data)
+  # Get reference to the following node
+  var tmp = lt.head.next
+  # Update prev of following node
+  tmp.prev = nd 
+  # Update next of preceding node
+  lt.head.next = nd
+  # Update node count in list
+  lt.count = lt.count + 1
+}
+
+#
+# Removes the first node with matching data
+# Returns 0-1 on failure-success
+#
+list.remove = function (lt, data) {
+  # Look for node to remove
+  var cur = list.get_node(lt, data)
+  if (cur != nil) {
+    # Updates link of preceding node
+    var prev = cur.prev
+    prev.next = cur.next
+    # Updates link of following node
+    var next = cur.next
+    next.prev = cur.prev
+    # Deletes current node (not needed? cur is local)
+    cur = nil
+    lt.count = lt.count - 1
+    return 1
+  }
+  return 0
+}
+
+#
+# Prints the list
+#
+list.print = function (lt) {
+  var cur = lt.head.next
+  while (cur.next != nil) {
+    print(cur.data)
+    cur = cur.next
+  }
+}

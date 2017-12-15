@@ -1,0 +1,43 @@
+# AUTHOR : Nathalie Majcherczyk <nmajcherczyk@wpi.edu>
+#          Based on pseudocode from Algorithms in a Nutshell
+#
+# This script implements the quicksort algorithm in Buzz.
+
+SEED = 10
+qsort = {}
+
+qsort.select_pivot = function(A, left, right) {
+  rng.setseed(SEED)
+  return rng.uniform(left, right)
+}
+
+qsort.swap = function(a, b) {
+  var temp = a
+  a = b
+  b = temp
+}
+
+qsort.sort = function(A, left, right) {
+  if (left < right) {
+    var pi = qsort.partition(A, left, right)
+    qsort.sort(A, left, pi - 1)
+    qsort.sort(A, pi + 1, right)
+  }
+}
+
+qsort.partition = function(A, left, right) {
+  var pvt = qsort.select_pivot(A, left, right)
+  qsort.swap(A[pvt], A[right])
+  var store = left
+  var i = left
+  while (i < right) {
+    if (A[i] <= A[right]) {
+      qsort.swap(A[i], A[store])
+      store = store + 1
+    }
+    i = i + 1
+  }
+  qsort.swap(A[store], A[right])
+  return store
+}
+
